@@ -1,0 +1,10 @@
+1.二级缓存数据结构为map  与 Cache对象 cache对象类似map
+    1.1 当执行 commit与close方法时 会进行刷新缓存操作  将map对象中的数据  刷新进Cache对象
+    1.2 执行close时实际上也会执行commit操作， 所以commit与close实际上调用的是同一个刷新缓存的方法
+2.增删改操作会进行清空二级缓存
+    2.1 增删改操作会将MappedStatement对象中的flushCacheRequired的值设置为true
+    2.2 若flushCacheRequired的值为true并且cache对象不等于null 将进行清空二级缓存操作  调用的是TransactionalCacheManager的clear方法来进行清空操作
+    2.3 mybatis的二级缓存只适用于不经常增删改的数据, 大量运用装饰者模式
+    2.4 二级缓存实现了sqlSession之间的缓存数据共享，属于namespace级别 namespace=各个sql配置文件
+    2.5 会产生脏读等问题，使用场景并不是很多
+    2.6 二级缓存的工作由CachingExecutor和一个事务型预缓存TransactionalCache完成
