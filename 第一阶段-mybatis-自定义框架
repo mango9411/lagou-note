@@ -1,0 +1,17 @@
+1. 创建配置文件 --> 两个核心配置文件 数据库与sql 数据库里包含sql配置文件的路径
+	1.1 数据库连接配置文件(driver) --> 内容为数量库驱动、账号密码与sql配置文件路径
+	1.2 sql配置文件(mapper) --> 内容为sql语句
+2. 读取配置文件 --> 使用dom4j解析 new SAXReader().read(配置文件输入流 inputStream);
+	2.1 解析数据库连接配置 封装进对象 configuration.DataSource         
+	2.2 解析sql配置文件  封装进对象	    mappedStatement  并封装进configuration对象的map属性
+3. 开启sql会话
+	3.1 通过配置对象连接数据库 并获得预处理对象
+	3.2 将mappedStatement里面的sql自定义条件符号转为数据库认识的符号 就是将#{}替换为? 并设置进预处理对象
+	3.3 通过mappedStatement里面的参数对象路径，获取查询参数，将查询参数设置进预处理对象
+	3.4 执行sql
+	3.5 通过mappedStatement里面的返回值对象路径，获取返回结果对象，利用反射将结果集封装进结果对象
+	3.6 返回结果集
+4. 利用动态代理，来解决硬编码与代码重复问题  就是mybatis里面的mapper
+	4.1 通过动态代理对mapper生成实现类(通过当前类的类加载器Proxy.newProxyInstance(当前类加载器，参数传递的class对象, 重写动态代理方法new InvocationHandler()))
+
+5. mybatis 轻量级半自动关系型数据库 ORM
